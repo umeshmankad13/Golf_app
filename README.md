@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GolfGive
+
+A subscription-driven web application combining golf performance tracking, charity fundraising, and a monthly draw-based reward engine.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Database:** Supabase (PostgreSQL)
+- **Auth:** Supabase Auth
+- **Payments:** Stripe
+- **Styling:** Tailwind CSS v4
+- **Language:** TypeScript
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A Supabase project
+- A Stripe account (test mode)
+
+### Setup
+
+1. Clone and install:
+
+```bash
+git clone <repo-url>
+cd golf-app
+npm install
+```
+
+2. Copy `.env.local.example` to `.env.local` and fill in your keys:
+
+```bash
+cp .env.local.example .env.local
+```
+
+3. Run the Supabase migrations in order:
+
+```bash
+# Run in Supabase SQL Editor:
+# 1. supabase/schema.sql
+# 2. supabase/fix_rls_recursion.sql
+# 3. supabase/setup.sql (creates exec_sql function for /setup page)
+# 4. supabase/storage.sql (creates storage bucket for proof uploads)
+```
+
+4. Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Visit `/setup` to create the admin account.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+6. (Optional) Set up Stripe:
+   - Create products & prices in Stripe Dashboard
+   - Add price IDs to `.env.local`
+   - Create webhook endpoint pointing to `/api/stripe/webhook`
+   - Copy webhook signing secret to `.env.local`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Test Credentials
 
-## Learn More
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | Create via `/setup` page | Your choice |
+| User | Sign up at `/signup` | Your choice |
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### User Panel
+- **Score Tracking** — Enter up to 5 Stableford scores (1-45 range)
+- **Draw Entry** — Pick 5 numbers for monthly prize draws
+- **Charity Selection** — Choose a charity, set contribution (10-50%)
+- **Winnings** — Track prizes, upload proof, view payment status
+- **Subscription** — Monthly ($9.99) or Yearly ($99) plans via Stripe
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Admin Panel (`/admin`)
+- **User Management** — View/edit profiles, scores, subscriptions
+- **Draw Management** — Create, simulate, publish, and settle draws
+- **Charity Management** — CRUD operations for charity listings
+- **Winner Verification** — Approve/reject proof submissions, mark payouts
+- **Reports** — Revenue, prize pool, charity impact analytics
 
-## Deploy on Vercel
+### Draw System
+- **5-Number Match** — 40% of prize pool (jackpot rollover)
+- **4-Number Match** — 35% of prize pool
+- **3-Number Match** — 25% of prize pool
+- Two draw modes: Random and Algorithmic (weighted by score frequency)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── auth/callback/     # OAuth callback
+│   │   ├── draw/              # Draw entry + settle
+│   │   ├── seed-admin/        # Admin role promotion
+│   │   └── stripe/            # Checkout, webhook, portal
+│   ├── admin/                 # Admin dashboard (6 pages)
+│   ├── dashboard/             # User dashboard (7 pages)
+│   ├── setup/                 # First-time admin setup
+│   └── (auth pages)/          # Login, signup, password reset
+├── components/                # Reusable UI components
+├── lib/
+│   ├── stripe/                # Stripe server + client
+│   └── supabase/              # Supabase client, server, middleware
+└── types/                     # TypeScript database types
+```
+
+## Environment Variables
+
+See `.env.local.example` for the full list.
+
+## Deployment
+
+1. Deploy to Vercel
+2. Connect to a new Supabase project
+3. Run all SQL migrations
+4. Configure Stripe webhook URL
+5. Set all environment variables

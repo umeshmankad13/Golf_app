@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
+/* ============================================================
+   CSS Custom Properties (Design Tokens)
+   Centralized color palette used throughout the app.
+   These feed into Tailwind via the @theme inline block below.
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;          /* Page background — light slate */
+  --foreground: #0f172a;          /* Primary text — dark slate */
+  --primary: #16a34a;             /* Primary brand color — green */
+  --primary-dark: #15803d;        /* Darker green for hover states */
+  --primary-light: #22c55e;       /* Lighter green for accents */
+  --secondary: #0ea5e9;           /* Secondary color — sky blue */
+  --accent: #f59e0b;              /* Accent color — amber/gold */
+  --muted: #64748b;               /* Muted text — slate gray */
+  --border: #e2e8f0;              /* Border color — light slate */
+  --card: #ffffff;                /* Card background — white */
+  --destructive: #ef4444;         /* Error/danger — red */
+  --success: #16a34a;             /* Success — matches primary green */
 }
 
+/* ============================================================
+   Tailwind Theme Integration
+   Maps CSS variables to Tailwind's color system so we can use
+   classes like bg-primary, text-muted, etc.
+   Also maps the font variables from layout.tsx.
+   ============================================================ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base body styles — applied globally */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ============================================================
+   Custom Scrollbar (WebKit browsers)
+   Thin, minimal scrollbar that matches the design system.
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ============================================================
+   Keyframe Animations
+   Reusable animations for entrance effects, emphasis, etc.
+   ============================================================ */
+
+/* Fade in + slide up — generic entrance for text and cards */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide in from left — used for sidebar or staggered list items */
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Pulse glow — attention-grabbing box-shadow pulse for CTA buttons */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  50% { box-shadow: 0 0 20px 5px rgba(22, 163, 74, 0.2); }
+}
+
+/* Slide up — heavier entrance for sections or modals */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scale in — pop-in effect for modals, tooltips, or cards */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Float — gentle vertical bobbing for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ============================================================
+   Animation Utility Classes
+   Apply these to elements to trigger the keyframe animations.
+   ============================================================ */
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.4s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   Staggered Animation Delays
+   Used with animation classes to create sequential reveals
+   (e.g., cards appearing one after another).
+   ============================================================ */
+.stagger-1 { animation-delay: 0.1s; opacity: 0; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; }
+
+/* ============================================================
+   Hover Effects
+   ============================================================ */
+
+/* Lift effect — subtle upward movement + shadow on hover for cards */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
 }
