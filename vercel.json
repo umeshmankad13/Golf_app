@@ -2,15 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key",
-    "NEXT_PUBLIC_RAZORPAY_KEY_ID": "@razorpay-key-id",
-    "RAZORPAY_KEY_SECRET": "@razorpay-key-secret",
-    "RAZORPAY_MONTHLY_PLAN_ID": "@razorpay-monthly-plan-id",
-    "RAZORPAY_YEARLY_PLAN_ID": "@razorpay-yearly-plan-id",
-    "NEXT_PUBLIC_APP_URL": "@app-url"
-  }
+  "installCommand": "npm install"
 }
