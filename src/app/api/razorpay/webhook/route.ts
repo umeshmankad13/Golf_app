@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { createClient } from "@supabase/supabase-js";
 import crypto from "crypto";
 

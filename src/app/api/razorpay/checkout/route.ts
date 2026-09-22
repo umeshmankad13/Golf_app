@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { createClient } from "@supabase/supabase-js";
 
 /**
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     // Create a Razorpay order on the server.
     // This is the secure way to initiate payments — the order is created
     // server-side so the amount and user ID cannot be tampered with.
-    const order = await razorpay.orders.create({
+    const order = await getRazorpay().orders.create({
       amount,
       currency: "INR",
       receipt,

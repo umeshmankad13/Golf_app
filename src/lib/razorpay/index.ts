@@ -10,11 +10,18 @@
  */
 import Razorpay from "razorpay";
 
-/** Server-side Razorpay instance for creating orders and verifying payments. */
-export const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+let _razorpay: Razorpay | null = null;
+
+/** Server-side Razorpay instance — lazily created at runtime. */
+export function getRazorpay(): Razorpay {
+  if (!_razorpay) {
+    _razorpay = new Razorpay({
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+  }
+  return _razorpay;
+}
 
 /**
  * Razorpay plan IDs mapped by subscription type.

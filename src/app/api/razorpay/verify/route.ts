@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { createClient } from "@supabase/supabase-js";
 import crypto from "crypto";
 
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
     // Fetch the Razorpay order to get the plan type from the notes.
     // This is the authoritative source — the client-sent planType is a fallback.
-    const order = await razorpay.orders.fetch(razorpay_order_id);
+    const order = await getRazorpay().orders.fetch(razorpay_order_id);
     const plan = order.notes?.plan_type || planType || "monthly";
 
     // Calculate the billing period start and end dates
